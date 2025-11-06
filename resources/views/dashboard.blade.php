@@ -127,7 +127,36 @@
     </div>
 
     <!-- Main Content -->
-    <div class="flex-1 p-8 overflow-auto">
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200 px-8 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <h1 class="text-2xl font-bold text-gray-800">Dashboard Monitoring</h1>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-600">Ruang Server BMKG</span>
+                </div>
+                
+                <div class="flex items-center space-x-4">
+                    <!-- Welcome Message -->
+                    <div class="text-right">
+                        <p class="text-sm font-semibold text-gray-700">Selamat datang!</p>
+                    </div>
+                    
+                    <!-- Logout Button -->
+                    <form method="POST" action="{{ route('admin.logout') }}" class="inline">
+                        @csrf
+                        <button type="submit" class="flex items-center px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            Logout
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <div class="flex-1 p-8 overflow-auto">
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
@@ -607,6 +636,9 @@
                 document.getElementById('current-time').textContent = now.toLocaleTimeString('id-ID');
             }, 1000);
         });
+
     </script>
+    </div> <!-- End Content Area -->
+    </div> <!-- End Main Content -->
 </body>
 </html>

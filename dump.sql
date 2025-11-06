@@ -1,0 +1,163 @@
+START TRANSACTION;
+CREATE TABLE IF NOT EXISTS `migrations` (
+	`id`	INT NOT NULL AUTO_INCREMENT,
+	`migration`	VARCHAR(255) NOT NULL,
+	`batch`	INT NOT NULL,
+	PRIMARY KEY(`id`)
+);
+CREATE TABLE IF NOT EXISTS `users` (
+	`id`	INT NOT NULL,
+	`name`	VARCHAR(255) NOT NULL,
+	`email`	VARCHAR(255) NOT NULL,
+	`email_verified_at`	DATETIME,
+	`password`	VARCHAR(255) NOT NULL,
+	`remember_token`	VARCHAR(100) DEFAULT NULL,
+	`created_at`	DATETIME DEFAULT NULL,
+	`updated_at`	DATETIME DEFAULT NULL,
+	PRIMARY KEY(`id`),
+	UNIQUE KEY `users_email_unique` (`email`)
+);
+CREATE TABLE IF NOT EXISTS `password_reset_tokens` (
+	`email`	VARCHAR(255) NOT NULL,
+	`token`	VARCHAR(255) NOT NULL,
+	`created_at`	DATETIME DEFAULT NULL,
+	PRIMARY KEY(`email`)
+);
+CREATE TABLE IF NOT EXISTS `sessions` (
+	`id`	VARCHAR(255) NOT NULL,
+	`user_id`	BIGINT UNSIGNED,
+	`ip_address`	VARCHAR(45),
+	`user_agent`	TEXT,
+	`payload`	TEXT NOT NULL,
+	`last_activity`	INT NOT NULL,
+	PRIMARY KEY(`id`),
+	INDEX `sessions_user_id_index` (`user_id`),
+	INDEX `sessions_last_activity_index` (`last_activity`)
+);
+CREATE TABLE IF NOT EXISTS `cache` (
+	`key`	VARCHAR(255) NOT NULL,
+	`value`	TEXT NOT NULL,
+	`expiration`	INT NOT NULL,
+	PRIMARY KEY(`key`)
+);
+CREATE TABLE IF NOT EXISTS `cache_locks` (
+	`key`	VARCHAR(255) NOT NULL,
+	`owner`	VARCHAR(255) NOT NULL,
+	`expiration`	INT NOT NULL,
+	PRIMARY KEY(`key`)
+);
+CREATE TABLE IF NOT EXISTS `jobs` (
+	`id`	BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`queue`	VARCHAR(255) NOT NULL,
+	`payload`	LONGTEXT NOT NULL,
+	`attempts`	TINYINT UNSIGNED NOT NULL,
+	`reserved_at`	INT UNSIGNED DEFAULT NULL,
+	`available_at`	INT UNSIGNED NOT NULL,
+	`created_at`	INT UNSIGNED NOT NULL,
+	PRIMARY KEY(`id`),
+	INDEX `jobs_queue_index` (`queue`)
+);
+CREATE TABLE IF NOT EXISTS `job_batches` (
+	`id`	VARCHAR(255) NOT NULL,
+	`name`	VARCHAR(255) NOT NULL,
+	`total_jobs`	INT NOT NULL,
+	`pending_jobs`	INT NOT NULL,
+	`failed_jobs`	INT NOT NULL,
+	`failed_job_ids`	LONGTEXT NOT NULL,
+	`options`	LONGTEXT,
+	`cancelled_at`	INT DEFAULT NULL,
+	`created_at`	INT NOT NULL,
+	`finished_at`	INT DEFAULT NULL,
+	PRIMARY KEY(`id`)
+);
+CREATE TABLE IF NOT EXISTS `failed_jobs` (
+	`id`	BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	`uuid`	VARCHAR(255) NOT NULL,
+	`connection`	TEXT NOT NULL,
+	`queue`	TEXT NOT NULL,
+	`payload`	LONGTEXT NOT NULL,
+	`exception`	LONGTEXT NOT NULL,
+	`failed_at`	DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	PRIMARY KEY(`id`),
+	UNIQUE KEY `failed_jobs_uuid_unique` (`uuid`)
+);
+CREATE TABLE IF NOT EXISTS `sensor_data` (
+	`id`	INT NOT NULL AUTO_INCREMENT,
+	`temperature`	DECIMAL(8, 2) NOT NULL,
+	`humidity`	DECIMAL(8, 2) NOT NULL,
+	`power_status`	TINYINT(1) NOT NULL DEFAULT 1,
+	`voltage`	DECIMAL(8, 2) DEFAULT NULL,
+	`location`	VARCHAR(255) NOT NULL DEFAULT 'Server Room',
+	`recorded_at`	DATETIME NOT NULL,
+	`created_at`	DATETIME DEFAULT NULL,
+	`updated_at`	DATETIME DEFAULT NULL,
+	`current`	DECIMAL(8, 2) DEFAULT NULL,
+	`power`	DECIMAL(8, 2) DEFAULT NULL,
+	PRIMARY KEY(`id`),
+	INDEX `sensor_data_recorded_at_index` (`recorded_at`)
+);
+INSERT INTO `migrations` VALUES (1,'0001_01_01_000000_create_users_table',1);
+INSERT INTO `migrations` VALUES (2,'0001_01_01_000001_create_cache_table',1);
+INSERT INTO `migrations` VALUES (3,'0001_01_01_000002_create_jobs_table',1);
+INSERT INTO `migrations` VALUES (4,'2024_10_06_000001_create_sensor_data_table',1);
+INSERT INTO `cache` VALUES ('laravel-cache-latest_db_record','i:242;',1762224376);
+INSERT INTO `cache` VALUES ('laravel-cache-last_db_save_time','i:1762137976;',1762224376);
+INSERT INTO `sensor_data` VALUES (1,20,35,1,235,'Server Room BMKG','2025-10-07 03:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (2,24,44,1,223,'Server Room BMKG','2025-10-07 04:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (3,23,49,1,228,'Server Room BMKG','2025-10-07 05:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (4,28,47,1,224,'Server Room BMKG','2025-10-07 06:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (5,18,41,0,225,'Server Room BMKG','2025-10-07 07:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (6,17,44,1,233,'Server Room BMKG','2025-10-07 08:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (7,18,61,1,225,'Server Room BMKG','2025-10-07 09:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (8,24,53,1,228,'Server Room BMKG','2025-10-07 10:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (9,30,46,1,226,'Server Room BMKG','2025-10-07 11:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (10,19,60,1,230,'Server Room BMKG','2025-10-07 12:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (11,19,53,1,229,'Server Room BMKG','2025-10-07 13:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (12,26,58,1,231,'Server Room BMKG','2025-10-07 14:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (13,27,41,1,229,'Server Room BMKG','2025-10-07 15:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (14,20,58,1,224,'Server Room BMKG','2025-10-07 16:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (15,24,37,1,232,'Server Room BMKG','2025-10-07 17:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (16,25,53,1,220,'Server Room BMKG','2025-10-07 18:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (17,29,47,0,223,'Server Room BMKG','2025-10-07 19:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (18,30,53,1,238,'Server Room BMKG','2025-10-07 20:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (19,30,42,1,233,'Server Room BMKG','2025-10-07 21:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (20,21,41,1,233,'Server Room BMKG','2025-10-07 22:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (21,26,64,1,220,'Server Room BMKG','2025-10-07 23:32:21','2025-10-08 03:32:21','2025-10-08 03:32:21',NULL,NULL);
+INSERT INTO `sensor_data` VALUES (197,0,0,0,0,'Server Room BMKG','2025-10-08 13:41:37','2025-10-08 13:41:37','2025-10-08 13:41:37',0,0);
+INSERT INTO `sensor_data` VALUES (198,0,0,0,0,'Server Room BMKG','2025-10-08 13:41:46','2025-10-08 13:41:46','2025-10-08 13:41:46',0,0);
+INSERT INTO `sensor_data` VALUES (199,0,0,0,0,'Server Room BMKG','2025-10-08 13:41:56','2025-10-08 13:41:56','2025-10-08 13:41:56',0,0);
+INSERT INTO `sensor_data` VALUES (200,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:06','2025-10-08 13:42:06','2025-10-08 13:42:06',0,0);
+INSERT INTO `sensor_data` VALUES (201,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:14','2025-10-08 13:42:14','2025-10-08 13:42:14',0,0);
+INSERT INTO `sensor_data` VALUES (202,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:21','2025-10-08 13:42:21','2025-10-08 13:42:21',0,0);
+INSERT INTO `sensor_data` VALUES (203,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:31','2025-10-08 13:42:31','2025-10-08 13:42:31',0,0);
+INSERT INTO `sensor_data` VALUES (204,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:41','2025-10-08 13:42:41','2025-10-08 13:42:41',0,0);
+INSERT INTO `sensor_data` VALUES (205,0,0,0,0,'Server Room BMKG','2025-10-08 13:42:48','2025-10-08 13:42:48','2025-10-08 13:42:48',0,0);
+INSERT INTO `sensor_data` VALUES (206,0,0,0,0,'Server Room BMKG','2025-10-08 13:43:01','2025-10-08 13:43:01','2025-10-08 13:43:01',0,0);
+INSERT INTO `sensor_data` VALUES (207,25.6,76.4,0,0,'Server Room BMKG','2025-10-10 13:53:14','2025-10-10 13:53:14','2025-10-10 13:53:14',0,0);
+INSERT INTO `sensor_data` VALUES (208,26.1,72.9,0,0,'Server Room BMKG','2025-10-10 14:53:18','2025-10-10 14:53:18','2025-10-10 14:53:18',0,0);
+INSERT INTO `sensor_data` VALUES (209,0,0,1,230.4,'Server Room BMKG','2025-10-16 12:50:56','2025-10-16 12:50:56','2025-10-16 12:50:56',0.114,13.4);
+INSERT INTO `sensor_data` VALUES (210,25.3,65,1,233.1,'Server Room BMKG','2025-10-16 13:50:58','2025-10-16 13:50:58','2025-10-16 13:50:58',0,0.5);
+INSERT INTO `sensor_data` VALUES (240,0,0,0,0,'Server Room BMKG','2025-10-31 15:28:08','2025-10-31 15:28:08','2025-10-31 15:28:08',NULL,0);
+INSERT INTO `sensor_data` VALUES (241,0,0,1,230.5,'Server Room BMKG','2025-11-03 08:35:25','2025-11-03 08:35:25','2025-11-03 08:35:25',NULL,1.1);
+INSERT INTO `sensor_data` VALUES (242,24.9,63.9,1,233.3,'Server Room BMKG','2025-11-03 09:46:16','2025-11-03 09:46:16','2025-11-03 09:46:16',NULL,0.5);
+
+/*
+CREATE UNIQUE INDEX IF NOT EXISTS `users_email_unique` ON `users` (
+	`email`
+);
+CREATE INDEX IF NOT EXISTS `sessions_user_id_index` ON `sessions` (
+	`user_id`
+);
+CREATE INDEX IF NOT EXISTS `sessions_last_activity_index` ON `sessions` (
+	`last_activity`
+);
+CREATE INDEX IF NOT EXISTS `jobs_queue_index` ON `jobs` (
+	`queue`
+);
+CREATE UNIQUE INDEX IF NOT EXISTS `failed_jobs_uuid_unique` ON `failed_jobs` (
+	`uuid`
+);
+CREATE INDEX IF NOT EXISTS `sensor_data_recorded_at_index` ON `sensor_data` (
+	`recorded_at`
+);*/
+COMMIT;
